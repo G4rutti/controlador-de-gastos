@@ -24,12 +24,8 @@ app.use(express.static('public'));
 
 // Rota principal
 app.get("/", async (req, res) =>{
-    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`).then(async() => {
-        res.send("hello world")
-    }).catch((error) => {
-        console.log(error)
-    })
-})
+    res.send("hello world")
+});
 
 app.get("/ler", async (req, res) => {
     mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`).then(async() => {
