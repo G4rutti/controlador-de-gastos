@@ -16,9 +16,6 @@ app.use(
 )
 app.use(bodyParser.json())
 
-//liberando o uso do css
-app.use(express.static('public'));
-
 // Configuração da porta do servidor
 const PORT = process.env.PORT || 3000;
 
