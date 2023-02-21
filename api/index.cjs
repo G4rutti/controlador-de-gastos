@@ -28,41 +28,36 @@ app.get("/", async (req, res) =>{
 });
 
 app.get("/ler", async (req, res) => {
-    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`)
     const cursor = await Financas.find({})
     return res.send(cursor)
 });
 
-app.post("/criar", async(req, res) =>{
-    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`)
+app.post("/criar", async(req, res) => {
     const { id, tipo, descricao, valor } = req.body;
     const gasto = new Financas({ id: id, tipo: tipo, descricao: descricao, valor: valor });
     gasto.save(function (err) {
         if (err) return console.error('Erro ao salvar gasto:',err);
         console.log(req.body)
         res.send('Gasto salvo com sucesso');
-    }).catch((error) => {
-        console.log(error)
-    });
-})
-
-app.delete("/deletar/:id", async(req, res) =>{
-    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`).then(async() => {{
-        try {
-            const id = req.params.id;
-            await Financas.deleteOne({id:id});
-            res.json({ message: 'Registro deletado com sucesso' });
-        } catch (error) {
-            console.error('Erro ao deletar registro:', error);
-            res.status(500).json({ error: 'Erro ao deletar registro' });
-        }
-    }}).catch((error) => {
-            console.log(error)
     })
 })
 
+app.delete("/deletar/:id", async(req, res) =>{
+    try {
+        const id = req.params.id;
+        await Financas.deleteOne({id:id});
+        res.json({ message: 'Registro deletado com sucesso' });
+    } catch (error) {
+        console.error('Erro ao deletar registro:', error);
+        res.status(500).json({ error: 'Erro ao deletar registro' });
+    }
 
-app.listen(PORT)
+})
+
+
+app.listen(PORT).then(() => {
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true })
+})
 console.log('Conectado')
 // Entregar uma porta
 // const DB_USER = process.env.DB_USER

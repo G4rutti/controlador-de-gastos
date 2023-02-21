@@ -14,5 +14,5 @@
             "dest": "api/index.cjs"
         }
     ],
-    "timeout": 30
+    "timeout": 300
 }
