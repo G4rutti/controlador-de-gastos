@@ -3,7 +3,7 @@ require('dotenv').config();
 const cors = require('cors')
 const bodyParser = require('body-parser')
 mongoose.set("strictQuery", true);
-const Financas = require("./config/finance-model.cjs");
+const Financas = require("../config/finance-model.cjs");
 const express = require("express");
 const app = express();
 
