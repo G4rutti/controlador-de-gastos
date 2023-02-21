@@ -58,8 +58,8 @@ app.delete("/deletar/:id", async(req, res) =>{
 // app.listen(PORT)
 // console.log('Conectado')
 // Entregar uma porta
-const DB_USER = process.env.DB_USER
-const DB_PASSWORD = process.env.DB_PASSWORD
+// const DB_USER = process.env.DB_USER
+// const DB_PASSWORD = process.env.DB_PASSWORD
 mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`,{ useNewUrlParser: true })
 .then(() => {
     app.listen(PORT)
