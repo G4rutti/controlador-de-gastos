@@ -13,5 +13,6 @@
             "src": "/(.*)",
             "dest": "api/index.cjs"
         }
-    ]
+    ],
+    "timeout": 30
 }
