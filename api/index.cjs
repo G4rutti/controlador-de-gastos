@@ -24,6 +24,7 @@ app.use(express.static('public'));
 
 // Rota principal
 app.get("/", async (req, res) =>{
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true })
     res.send("hello world")
 });
 
@@ -55,9 +56,7 @@ app.delete("/deletar/:id", async(req, res) =>{
 })
 
 
-app.listen(PORT).then(() => {
-    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true })
-})
+app.listen(PORT)
 console.log('Conectado')
 // Entregar uma porta
 // const DB_USER = process.env.DB_USER
