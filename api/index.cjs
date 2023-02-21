@@ -29,11 +29,13 @@ app.get("/", async (req, res) =>{
 });
 
 app.get("/ler", async (req, res) => {
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true })
     const cursor = await Financas.find({})
     return res.send(cursor)
 });
 
 app.post("/criar", async(req, res) => {
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true })
     const { id, tipo, descricao, valor } = req.body;
     const gasto = new Financas({ id: id, tipo: tipo, descricao: descricao, valor: valor });
     gasto.save(function (err) {
@@ -44,6 +46,7 @@ app.post("/criar", async(req, res) => {
 })
 
 app.delete("/deletar/:id", async(req, res) =>{
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true })
     try {
         const id = req.params.id;
         await Financas.deleteOne({id:id});
