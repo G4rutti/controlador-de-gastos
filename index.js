@@ -25,7 +25,7 @@ app.use(express.static('public'));
 
 // Rota principal
 app.get("/", async (req, res) =>{
-    res.sendFile(__dirname + "/public/index.html")
+    res.send("hello world")
 })
 
 app.get("/ler", async (req, res) => {
