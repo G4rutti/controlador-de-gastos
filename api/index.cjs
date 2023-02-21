@@ -24,47 +24,61 @@ app.use(express.static('public'));
 
 // Rota principal
 app.get("/", async (req, res) =>{
-    res.send("hello world")
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`).then(async() => {
+        res.send("hello world")
+    }).catch((error) => {
+        console.log(error)
+    })
 })
 
 app.get("/ler", async (req, res) => {
-    const cursor = await Financas.find({})
-    return res.send(cursor)
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`).then(async() => {
+        const cursor = await Financas.find({})
+        return res.send(cursor)
+    }).catch((error) => {
+        console.log(error)
+    })
 });
 
 app.post("/criar", async(req, res) =>{
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`)
     const { id, tipo, descricao, valor } = req.body;
     const gasto = new Financas({ id: id, tipo: tipo, descricao: descricao, valor: valor });
     gasto.save(function (err) {
         if (err) return console.error('Erro ao salvar gasto:',err);
         console.log(req.body)
         res.send('Gasto salvo com sucesso');
+    }).catch((error) => {
+        console.log(error)
     });
 })
 
 app.delete("/deletar/:id", async(req, res) =>{
-    try {
-        const id = req.params.id;
-        await Financas.deleteOne({id:id});
-        res.json({ message: 'Registro deletado com sucesso' });
-      } catch (error) {
-        console.error('Erro ao deletar registro:', error);
-        res.status(500).json({ error: 'Erro ao deletar registro' });
-      }
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`).then(async() => {{
+        try {
+            const id = req.params.id;
+            await Financas.deleteOne({id:id});
+            res.json({ message: 'Registro deletado com sucesso' });
+        } catch (error) {
+            console.error('Erro ao deletar registro:', error);
+            res.status(500).json({ error: 'Erro ao deletar registro' });
+        }
+    }}).catch((error) => {
+            console.log(error)
+    })
 })
 
 
-// app.listen(PORT)
-// console.log('Conectado')
+app.listen(PORT)
+console.log('Conectado')
 // Entregar uma porta
 // const DB_USER = process.env.DB_USER
 // const DB_PASSWORD = process.env.DB_PASSWORD
 // mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`)
-mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`)
-.then(() => {
-    app.listen(PORT)
-    console.log('Conectado')
-})
-.catch((error) => {
-    console.log(error)
-})
+// .then(() => {
+//     app.listen(PORT)
+//     console.log('Conectado')
+// })
+// .catch((error) => {
+//     console.log(error)
+// })
