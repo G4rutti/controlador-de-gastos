@@ -28,12 +28,9 @@ app.get("/", async (req, res) =>{
 });
 
 app.get("/ler", async (req, res) => {
-    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`).then(async() => {
-        const cursor = await Financas.find({})
-        return res.send(cursor)
-    }).catch((error) => {
-        console.log(error)
-    })
+    mongoose.connect(`mongodb+srv://davigarutti5:BFiP1LTgvWe7GQL1@cluster0.3gunjkh.mongodb.net/?retryWrites=true&w=majority`)
+    const cursor = await Financas.find({})
+    return res.send(cursor)
 });
 
 app.post("/criar", async(req, res) =>{
