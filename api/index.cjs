@@ -31,17 +31,56 @@ app.get("/ler", async (req, res) => {
     const cursor = await Financas.find({})
     return res.send(cursor)
 });
-
-app.post("/criar", async(req, res) => {
-    const { id, tipo, descricao, valor } = req.body;
-    const gasto = new Financas({ id: id, tipo: tipo, descricao: descricao, valor: valor });
-    gasto.save(function (err) {
-        if (err) return console.error('Erro ao salvar gasto:',err);
-        console.log(req.body)
-        res.send('Gasto salvo com sucesso');
-    })
+app.get("/tipoDado/:tipo", async(req, res) => {
+    try {
+        const tipo = req.params.tipo;
+        console.log(tipo)
+        const cursor = await Financas.find({tipoPasta:tipo})
+        console.log(cursor)
+        return res.send(cursor)
+    } catch (error) {
+        console.error('Erro:', error);
+        res.status(500).json({ error: 'Erro' });
+    }
+    
 })
-
+app.post("/criarPasta", async(req,res) => {
+    try {
+        const {tipoPasta} = req.body
+        const pasta = new Financas({tipoPasta: tipoPasta});
+        pasta.save(function(err){
+            if (err) return console.error('Erro ao salvar pasta:',err);
+            console.log(req.body)
+            res.send('Pasta salva com sucesso');
+        })
+    } catch (error) {
+        console.error('Erro ao adicionar registro:', error);
+        res.status(500).json({ error: 'Erro ao adicionar registro' });
+    }
+})
+app.patch("/criarGasto/:tipoPasta", async(req, res) => {
+    const novoValor = {
+        idGasto: req.body.idGasto,
+        tipo: req.body.tipo,
+        descricao: req.body.descricao,
+        valor: req.body.valor,
+      };
+    
+      Financas.findOneAndUpdate(
+        { tipoPasta: req.params.tipoPasta },
+        { $push: { gastos: novoValor } },
+        { new: true },
+        (err, doc) => {
+          if (err) {
+            res.status(500).json({ erro: "Erro ao atualizar documento" });
+          } else if (!doc) {
+            res.status(404).json({ erro: "Documento não encontrado" });
+          } else {
+            res.json(doc);
+          }
+        }
+      );
+})
 app.delete("/deletar/:id", async(req, res) =>{
     try {
         const id = req.params.id;
@@ -53,7 +92,50 @@ app.delete("/deletar/:id", async(req, res) =>{
     }
 
 })
+app.delete("/gastos/:tipo/:idGastos", async (req, res) => {
+  try {
+    const { tipo, idGastos } = req.params;
 
+    // Encontrar todos os documentos de Financas com o tipo especificado
+    const financasArray = await Financas.find({ tipo });
+    if (financasArray.length === 0) {
+      return res.status(404).json({ error: 'Tipo de financas não encontrado' });
+    }
+
+    // Encontrar o gasto correto em um dos documentos de Financas
+    const financas = financasArray.find(fin => fin.gastos.some(g => g.idGasto == idGastos));
+    if (!financas) {
+      return res.status(404).json({ error: 'Gasto não encontrado' });
+    }
+
+    // Remover o gasto do array
+    financas.gastos = financas.gastos.filter(g => g.idGasto !== idGastos);
+
+    // Salvar as alterações no banco de dados
+    await financas.save();
+
+    res.json({ message: 'Gasto removido com sucesso' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Ocorreu um erro ao remover o gasto');
+  }
+});
+// app.get("/gastos/:tipo/:idGastos", async (req, res) => {
+//   try {
+//     const { tipo, idGastos } = req.params;
+//     const financas = await Financas.findOne({ tipo , idGastos });
+//     if (!financas) {
+//       return res.status(404).json({ error: 'Tipo de financas não encontrado' });
+//     }
+//     const gastos = financas.gastos;
+//     res.json(gastos);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send('Ocorreu um erro ao buscar os gastos');
+//   }
+// });
+
+  
 
 // app.listen(PORT)
 // console.log('Conectado')
